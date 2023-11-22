@@ -1,5 +1,5 @@
 import React from "react";
-import Logo from "../../assets/LogoOG.png";
+import Logo from "../../assets/logoOG.png";
 import styles from "../NavBar/NavBar.module.css";
 import { Link } from "react-router-dom"; // navegación entre páginas.
 import SearchBar from "../SearchBar/SearchBar";
