@@ -8,7 +8,6 @@ import styles from "../DogArea/DogArea.module.css";
 
 const imagenes = async (id) => {
   const { data } = await axios.get(`https://api.thedogapi.com/v1/images/${id}`);
-  console.log(data);
   return data.url;
 };
 
@@ -16,6 +15,7 @@ const imagenes = async (id) => {
 const DogArea = () => { // Este componente principal utiliza el gancho useDispatch para obtener una función de
   // despacho y el gancho useSelector para obtener el estado de Redux.
   const dispatch = useDispatch();
+  // let allDogs = useSelector((state) => state.allDogs);
   let allDogs = useSelector((state) => state.allDogs);
   const [currentPage, setCurrentPage] = useState(1);
   const [dogsPerPage] = useState(12);
