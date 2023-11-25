@@ -5,6 +5,7 @@ const initialState = {
     temperaments: [],
     breeds: [],
     details: [],
+    toFilter: []
 };
 
 function rootReducer(state = initialState, action) {
@@ -21,18 +22,19 @@ function rootReducer(state = initialState, action) {
                 allDogs: action.payload,
             };
             case 'GET_DOGS_BY_TEMP':
-  const allDogsByTemp = state.dogs;
-
-  if (!action.payload || action.payload.length === 0) {
-    return { ...state, dogs_copy: allDogsByTemp };
-  }
-
-  const filteredDogsByTemp = allDogsByTemp.filter((dog) => dog.temp === action.payload);
+  const allDogsByTemp = state.toFilter.filter(
+    (dogs) =>
+      (dogs.temperament && dogs.temperament.includes(payload)) ||
+      (dogs.temperaments &&
+        dogs.temperaments.filter((temp) => temp.name.includes(payload)))
+  );
 
   return {
     ...state,
-    allDogs: filteredDogsByTemp,
+    allDogs: allDogsByTemp,
+    toFilter: allDogsByTemp, // Actualiza también toFilter si es necesario
   };
+            
         case 'GET_BREEDS':
             return {
                 ...state,
@@ -67,15 +69,10 @@ function rootReducer(state = initialState, action) {
                 allDogs: sortedArr,
             };
             case 'ORDER_BY_WEIGHT':
-                const sortedWeight = action.payload === 'asc'
-                  ? [...state.dogs].sort((a, b) => (a.weight_min || 0) - (b.weight_min || 0))
-                  : [...state.dogs].sort((a, b) => (b.weight_min || 0) - (a.weight_min || 0));
-              
-                return {
-                  ...state,
-                  allDogs: [...sortedWeight],
-                };
-              
+  return {
+    ...state,
+    allDogs: action.payload,
+  };              
               case 'FILTER_BY_MAX_WEIGHT':
                 const weightMAXFiltered = action.payload === 'all'
                   ? [...state.dogs]
@@ -116,6 +113,7 @@ function rootReducer(state = initialState, action) {
             return state;
     }
 }
+
 
 export default rootReducer;
 

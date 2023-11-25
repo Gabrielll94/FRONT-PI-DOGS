@@ -22,13 +22,13 @@ const DogCard = ({ id, name, image, temperament, temperaments }) => { // Toma de
   return (
     <Fragment>
       <div className={styles.dogCard}>
-         <Link to={`/dogs/${id}`}> {/*Se utiliza el componente Link de React Router para crear un enlace a la ruta
+        <Link to={`/dogs/${id}`}> {/*Se utiliza el componente Link de React Router para crear un enlace a la ruta
          correspondiente a través de /dogs/${id}. */}
           <div className={styles.titleArea}>
             <h4 className={styles.dogName}>{name}</h4>
           </div>
           <div className={styles.infoArea}>
-             <div className={styles.tempArea}>{displayTemperament()}</div> {/*Se utiliza la función displayTemperament
+            <div className={styles.tempArea}>{displayTemperament()}</div> {/*Se utiliza la función displayTemperament
              para renderizar la sección de temperamento de manera dinámica. */}
             <div className={styles.imageArea}>
               <img

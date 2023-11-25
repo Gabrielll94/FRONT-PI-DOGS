@@ -1,6 +1,6 @@
-import { React, Fragment, useEffect } from "react";
+import { React, Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { sortByWeight } from '../../utils/utils';
 import {
   getDogs,
   getTemperamentsList,
@@ -9,8 +9,6 @@ import {
   filterCreated,
   getBreeds,
   getDogsByBreed,
-  filterDogsByMAXWeight,
-  filterDogsByMINWeight,
   orderByWeight
 } from "../../Redux/Actions/index";
 import styles from "./SideBar.module.css";
@@ -23,22 +21,10 @@ export default function SideBar() {
       else return 1;
     }
   );
-  const allDogs = useSelector((state) => state.allDogs);
+  const allDogs = useSelector((state) => state.dogs);
   const breeds = useSelector((state) => state.breeds);
   
-  const minWeights = allDogs
-    .map((el) => el.weight_min)
-    .sort(function (a, b) {
-      return a - b;
-    });
-  const allDogsMinWeights = [...new Set(minWeights)];
-  
-  const maxWeights = allDogs
-    .map((el) => el.weight_max)
-    .sort(function (a, b) {
-      return a - b;
-    });
-  const allDogsMaxWeights = [...new Set(maxWeights)];
+  const [currentPage, setCurrentPage] = useState(0); // Agregando el estado currentPage
 
   useEffect(() => {
     dispatch(getDogs());
@@ -55,10 +41,38 @@ export default function SideBar() {
     e.preventDefault();
     dispatch(orderByName(e.target.value));
   }
-  function handleClickOrderWeight(e) {
-    e.preventDefault();
-    dispatch(orderByWeight(e.target.value));
-  }
+
+  const compareWeights = (a, b) => {
+    const weightA = a.weight?.metric
+      ? parseInt(a.weight.metric.split(' ')[0])
+      : parseInt(a.weight);
+    const weightB = b.weight?.metric
+      ? parseInt(b.weight.metric.split(' ')[0])
+      : parseInt(b.weight);
+  
+    if (weightA > weightB) {
+      return -1;
+    }
+    if (weightA < weightB) {
+      return 1;
+    }
+    return 0;
+  };
+  
+  const filterByWeight = (e) => {
+    const value = e.target.value;
+    if (!value) return;
+  
+    const copyWeightDogs = [...allDogs];
+  
+    const orderedByWeight = value === 'W-l'
+      ? copyWeightDogs.sort((a, b) => compareWeights(a, b))
+      : copyWeightDogs.sort((a, b) => compareWeights(b, a));
+  
+    dispatch(orderByWeight(orderedByWeight));
+  };
+  
+  
   function handleFilterCreated(e) {
     dispatch(filterCreated(e.target.value));
   }
@@ -70,14 +84,14 @@ export default function SideBar() {
     e.preventDefault();
     dispatch(getDogsByBreed(e.target.value));
   }
-  function handleFilteredMAXWeight(e) {
-    e.preventDefault();
-    dispatch(filterDogsByMAXWeight(e.target.value));
-  }
-  function handleFilteredMINWeight(e) {
-    e.preventDefault();
-    dispatch(filterDogsByMINWeight(e.target.value));
-  }
+  // function handleFilteredMAXWeight(e) {
+  //   e.preventDefault();
+  //   dispatch(filterDogsByMAXWeight(e.target.value));
+  // }
+  // function handleFilteredMINWeight(e) {
+  //   e.preventDefault();
+  //   dispatch(filterDogsByMINWeight(e.target.value));
+  // }
   return (
     <Fragment>
       <div className={styles.side}>
@@ -109,17 +123,11 @@ export default function SideBar() {
         </div>
         <div className={styles.filterSection}>
           <h5 className={styles.filterHeader}>Order by weight</h5>
-          <select
-            onChange={(e) => {
-              handleClickOrderWeight(e);
-            }}
-          >
-            <option defaultValue value="all" hidden>
-              Order
-            </option>
-            <option value="asc">Heaviest 1º</option>
-            <option value="desc">Lightest 1º</option>
-          </select>
+            <select name="weight" onChange={filterByWeight} id="">
+        <option value="">Weight</option>
+        <option value="L-w">L-w</option>
+        <option value="W-l">W-l</option>
+      </select>
         </div>
         <div className={styles.filterSection}>
           <h5 className={styles.filterHeader}>Filter by source</h5>
@@ -163,7 +171,7 @@ export default function SideBar() {
             })}
           </select>
         </div>
-        <div className={styles.filterSection}>
+        {/* <div className={styles.filterSection}>
           <h5 className={styles.filterHeader}>Filter by max weight</h5>
           <select onChange={(e) => handleFilteredMAXWeight(e)}>
             <option value="all">All Weights</option>
@@ -192,8 +200,8 @@ export default function SideBar() {
               );
             })}
           </select>
-        </div>
-        <div className={styles.filterSection}>
+        </div> */}
+        {/* <div className={styles.filterSection}>
           <h5 className={styles.filterHeader}>Add a Dog</h5>
           <div className={styles.addDog}>
             <Link to="/newDog/" className={styles.tooltip}>
@@ -201,7 +209,7 @@ export default function SideBar() {
               <span className={styles.tooltiptext}>Add your Dog 🐕🐕🐕🐕</span>
             </Link>
           </div>
-        </div>
+        </div> */}
       </div>
     </Fragment>
   );

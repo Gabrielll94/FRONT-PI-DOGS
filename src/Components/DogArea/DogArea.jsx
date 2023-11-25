@@ -13,23 +13,28 @@ const imagenes = async (id) => {
 };
 
 
-const DogArea = () => {
+const DogArea = () => { // Este componente principal utiliza el gancho useDispatch para obtener una función de
+  // despacho y el gancho useSelector para obtener el estado de Redux.
   const dispatch = useDispatch();
   let allDogs = useSelector((state) => state.allDogs);
   const [currentPage, setCurrentPage] = useState(1);
-  const [dogsPerPage] = useState(8);
+  const [dogsPerPage] = useState(12);
   const indexOfLastDog = currentPage * dogsPerPage;
   const indexOfFirstDog = indexOfLastDog - dogsPerPage;
   const currentDogs = allDogs ? allDogs.slice(indexOfFirstDog, indexOfLastDog) : [];
 
-  const pagination = (pageNumber) => {
+  const pagination = (pageNumber) => { // Esta función actualiza el estado local currentPagecuando se hace clic
+    // en un número de página.
     setCurrentPage(pageNumber);
   };
-
+  // Se realiza una solicitud para obtener datos de perros cuando el componente se monta ( useEffect).
   useEffect(() => {
     dispatch(getDogs());
   }, [dispatch]);
 
+
+  //Renderiza el componente de paginación y luego mapea sobre la lista de perros actuales para renderizar tarjetas
+  // de perros ( DogCardWrapper).
   return (
     <Fragment>
       <div className={styles.dogsArea}>
@@ -48,7 +53,7 @@ const DogArea = () => {
   );
 };
 
-const DogCardWrapper = ({ dog }) => {
+const DogCardWrapper = ({ dog }) => { // Este componente toma un objeto dogcomo accesorio.
   const [imagen, setImagen] = useState(null);
 
   useEffect(() => {

@@ -19,6 +19,7 @@
 
     .header {
     margin: 0 10px;
+    color: aqua;
     }
     .refresh:hover {
     color: white;
@@ -60,6 +61,7 @@
 
     .filterHeader {
     margin-bottom: 2%;
+    color: aqua;
     }
 
     select {
