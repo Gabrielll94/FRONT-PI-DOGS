@@ -42,7 +42,7 @@ export default function SideBar() {
   const compareWeights = (a, b) => {
     const weightA = a.weightMax
     const weightB = b.weightMax
-  
+  console.log(a);
     if (weightA > weightB) {
       return -1;
     }

@@ -21,29 +21,16 @@ function rootReducer(state = initialState, action) {
                 ...state,
                 allDogs: action.payload,
             };
-            case 'GET_DOGS_BY_TEMP':
-  const payload = action.payload;
+            case "GET_DOGS_BY_TEMP":
+        let copy = state.allDogs.filter((dog) =>
+        dog.temperament.includes(action.payload)
+      );
+      console.log(copy);
 
-  console.log('Payload:', payload);
-
-  const allDogsByTemp = state.toFilter.filter((dog) => {
-    console.log('Dog:', dog);
-
-    const hasTemperament =
-      (dog.temperament && dog.temperament.toLowerCase().includes(payload.toLowerCase())) ||
-      (dog.temperaments &&
-        dog.temperaments.some((temp) => temp.name.toLowerCase().includes(payload.toLowerCase())));
-
-    return hasTemperament;
-  });
-
-  console.log('Filtered Dogs:', allDogsByTemp);
-
-  return {
-    ...state,
-    allDogs: allDogsByTemp,
-    toFilter: allDogsByTemp,
-  };
+      return {
+        ...state,
+        allDogs: copy,
+      }
             
         case 'GET_BREEDS':
             return {
@@ -64,40 +51,42 @@ function rootReducer(state = initialState, action) {
                   ...state,
                   allDogs: allDogsByBreed.filter((dog) => dog.breed === action.payload),
                 };
-                case 'FILTER_CREATED':
-  const createdFilter = action.payload === 'created'
-    ? state.dogs.filter((el) => {
-        console.log('Dog:', el);
-        console.log('Filter condition:', el.createdInDB === true);
-        return el.createdInDB === true;
-      })
-    : state.dogs.filter((el) => {
-        console.log('Dog:', el);
-        console.log('Filter condition:', el.createdInDB !== true);
-        return el.createdInDB !== true;
-      });
+                case "FILTER_CREATED":
+      const createdFilter = action.payload === "created"
+          ? state.allDogs.filter((el) => {
+              return el.id.length === 36;
+            })
+          : state.allDogs.filter((el) => {
+              return Number(el.id);
+            });
 
-  console.log('Filtered dogs:', createdFilter);
-
-  return {
-    ...state,
-    allDogs: createdFilter,
-  };
-        case 'ORDER_BY_NAME':
+      return {
+        ...state,
+        allDogs: createdFilter,
+      }
+      case 'ORDER_BY_NAME':
             const sortedArr = action.payload === 'asc' ?
-                [...state.dogs].sort((a, b) => a.name.localeCompare(b.name)) :
-                [...state.dogs].sort((a, b) => b.name.localeCompare(a.name));
+                [...state.dogs].sort(function (a, b) {
+                    if (a.name > b.name) { return 1 }
+                    if (b.name > a.name) { return -1 }
+                    return 0;
+                }) :
+                [...state.dogs].sort(function (a, b) {
+                    if (a.name > b.name) { return -1; }
+                    if (b.name > a.name) { return 1; }
+                    return 0;
+                })
             return {
                 ...state,
-                allDogs: sortedArr,
-            };
+                allDogs: sortedArr
+            }
             case 'ORDER_BY_WEIGHT':
-  return {
-    ...state,
-    allDogs: action.payload,
-  };
-              
-              
+            return {
+            ...state,
+            allDogs: action.payload,
+            };
+
+
         case 'POST_DOG':
             // Handle the state update for adding a new dog if needed
             return {
