@@ -61,13 +61,11 @@ export default function SideBar() {
     const orderedByWeight = value === 'W-l'
       ? copyWeightDogs.sort((a, b) => compareWeights(a, b))
       : copyWeightDogs.sort((a, b) => compareWeights(b, a));
-      console.log(orderedByWeight);
   
     dispatch(orderByWeight(orderedByWeight));
   };
   
   function handleFilterCreated(e) {
-    console.log('Filter value:', e.target.value);
     dispatch(filterCreated(e.target.value));
   }
   function handleFilteredByTemp(e) {

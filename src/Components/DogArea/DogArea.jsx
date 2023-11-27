@@ -59,6 +59,7 @@ const DogCardWrapper = ({ dog }) => { // Este componente toma un objeto dogcomo 
   useEffect(() => {
     const fetchImagen = async () => {
       try {
+        console.log(dog);
         const url = await imagenes(dog.image);
         setImagen(url);
       } catch (error) {

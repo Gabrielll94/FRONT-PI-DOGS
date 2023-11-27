@@ -52,18 +52,18 @@ function rootReducer(state = initialState, action) {
                   allDogs: allDogsByBreed.filter((dog) => dog.breed === action.payload),
                 };
                 case "FILTER_CREATED":
-      const createdFilter = action.payload === "created"
-          ? state.allDogs.filter((el) => {
-              return el.id.length === 36;
+    const createdFilter = action.payload === "created"
+        ? state.allDogs.filter((el) => {
+            return el.id.length === 36;
             })
-          : state.allDogs.filter((el) => {
-              return Number(el.id);
+        : state.allDogs.filter((el) => {
+            return Number(el.id);
             });
-
-      return {
+            console.log(createdFilter);
+    return {
         ...state,
         allDogs: createdFilter,
-      }
+    }
       case 'ORDER_BY_NAME':
             const sortedArr = action.payload === 'asc' ?
                 [...state.dogs].sort(function (a, b) {

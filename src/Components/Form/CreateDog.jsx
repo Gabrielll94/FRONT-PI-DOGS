@@ -22,35 +22,35 @@ function validateForm(input) { // comprueba varios campos de entrada y devuelve 
   }
 
   // WEIGHTS
-  if (!input.weight_min) {
-    errors.weight_min = "Type a valid minimal weight number";
-  } else if (!/\d{1,2}/gi.test(input.weight_min)) {
-    errors.weight_min = "Weight must have min values. Example: '25'";
+  if (!input.weightMin) {
+    errors.weightMin = "Type a valid minimal weight number";
+  } else if (!/\d{1,2}/gi.test(input.weightMin)) {
+    errors.weightMin = "Weight must have min values. Example: '25'";
   } else {
-    errors.weight_min = "";
+    errors.weightMin = "";
   }
-  if (!input.weight_max) {
-    errors.weight_max = "Type a valid maxim weight number";
-  } else if (!/\d{1,2}/gi.test(input.weight_max)) {
-    errors.weight_max = "Weight must have max values. Example: '25'";
+  if (!input.weightMax) {
+    errors.weightMax = "Type a valid maxim weight number";
+  } else if (!/\d{1,2}/gi.test(input.weightMax)) {
+    errors.weightMax = "Weight must have max values. Example: '25'";
   } else {
-    errors.weight_max = "";
+    errors.weightMax = "";
   }
 
   // HEIGHTS
-  if (!input.height_min) {
-    errors.height_min = "Type a valid minimal height number";
-  } else if (!/\d{1,2}/gi.test(input.height_min)) {
-    errors.height_min = "Height must have min values. Example: '25'";
+  if (!input.heightMin) {
+    errors.heightMin = "Type a valid minimal height number";
+  } else if (!/\d{1,2}/gi.test(input.heightMin)) {
+    errors.heightMin = "Height must have min values. Example: '25'";
   } else {
-    errors.height_min = "";
+    errors.heightMin = "";
   }
-  if (!input.height_max) {
-    errors.height_max = "Type a valid maxim height number";
-  } else if (!/\d{1,2}/gi.test(input.height_max)) {
-    errors.height_max = "Height must have max values. Example: '25'";
+  if (!input.heightMax) {
+    errors.heightMax = "Type a valid maxim height number";
+  } else if (!/\d{1,2}/gi.test(input.heightMax)) {
+    errors.heightMax = "Height must have max values. Example: '25'";
   } else {
-    errors.height_max = "";
+    errors.heightMax = "";
   }
 
   return errors;
@@ -70,12 +70,12 @@ function CreateDog() {
   const [input, setInput] = useState({
     name: "",
     image: "",
-    height_min: "",
-    height_max: "",
-    weight_min: "",
-    weight_max: "",
-    life_span: "",
-    temperament: [],
+    heightMin: "",
+    heightMax: "",
+    weightMin: "",
+    weightMax: "",
+    lifeSpan: "",
+    temperaments: [],
   });
 // Funciones para manejar cambios de entrada de formulario, selección de temperamento, eliminación de temperamento
 // y envío de formulario
@@ -94,33 +94,33 @@ function handleChange(e) {
   function handleSelect(e) {
     setInput((prevInput) => ({
       ...prevInput,
-      temperament: [...prevInput.temperament, e.target.value],
+      temperaments: [...prevInput.temperaments, e.target.value],
     }));
   }
 
   function handleDelete(el) { // maneja la eliminación de temperamentos seleccionados y actualiza el estado
     setInput((prevInput) => ({
       ...prevInput,
-      temperament: prevInput.temperament.filter((temp) => temp !== el),
+      temperaments: prevInput.temperaments.filter((temp) => temp !== el),
     }));
   }
 
   function handleSubmit(e) {
     e.preventDefault();
     const formErrors = validateForm(input);
-
+    console.log(input);
     if (Object.values(formErrors).every((error) => error === "")) {
       alert("Your dog has been created successfully");
       dispatch(postDog(input));
       setInput({
         name: "",
         image: "",
-        height_min: "",
-        weight_min: "",
-        height_max: "",
-        weight_max: "",
-        life_span: "",
-        temperament: [],
+        heightMin: "",
+        weightMin: "",
+        heightMax: "",
+        weightMax: "",
+        lifeSpan: "",
+        temperaments: [],
       });
       navigate("/home");
     } else {
@@ -157,7 +157,7 @@ function handleChange(e) {
             <div className={styles.Section}>
               <label>Image URL:</label>
               <input
-                type="url"
+                type="text"
                 value={input.image}
                 name="image"
                 placeholder="http://myimageontheweb.com"
@@ -172,26 +172,26 @@ function handleChange(e) {
               <label>Min</label>
               <input
                 type="number"
-                value={input.height_min}
-                name="height_min"
+                value={input.heightMin}
+                name="heightMin"
                 placeholder="20"
                 onChange={(e) => handleChange(e)}
                 required
               />
               <div>
-                <p className={styles.error}>{errors.height_min}</p>
+                <p className={styles.error}>{errors.heightMin}</p>
               </div>
               <label>Max</label>
               <input
                 type="number"
-                value={input.height_max}
-                name="height_max"
+                value={input.heightMax}
+                name="heightMax"
                 placeholder="50"
                 onChange={(e) => handleChange(e)}
                 required
               />
               <div>
-                <p className={styles.error}>{errors.height_max}</p>
+                <p className={styles.error}>{errors.heightMax}</p>
               </div>
             </div>
             <div className={styles.Section}>
@@ -199,34 +199,34 @@ function handleChange(e) {
               <label>Min</label>
               <input
                 type="number"
-                value={input.weight_min}
-                name="weight_min"
+                value={input.weightMin}
+                name="weightMin"
                 placeholder="15"
                 onChange={(e) => handleChange(e)}
                 required
               />
               <div>
-                <p className={styles.error}>{errors.weight_min}</p>
+                <p className={styles.error}>{errors.weightMin}</p>
               </div>
               <label>Max</label>
               <input
                 type="number"
-                value={input.weight_max}
-                name="weight_max"
+                value={input.weightMax}
+                name="weightMax"
                 placeholder="32"
                 onChange={(e) => handleChange(e)}
                 required
               />
               <div>
-                <p className={styles.error}>{errors.weight_max}</p>
+                <p className={styles.error}>{errors.weightMax}</p>
               </div>
             </div>
             <div className={styles.Section}>
               <label>Life Span</label>
               <input
                 type="text"
-                value={input.life_span}
-                name="life_span"
+                value={input.lifeSpan}
+                name="lifeSpan"
                 placeholder="12 - 15 years"
                 onChange={(e) => handleChange(e)}
               />
@@ -243,7 +243,7 @@ function handleChange(e) {
 
               <div className={styles.sidebar_box}>
                 <h4>You have selected that:</h4>
-                {input.temperament.map((el) => (
+                {input.temperaments.map((el) => (
                   <div key={el} className={styles.selectedItems}>
                     <p>{el}</p>
                     <button onClick={() => handleDelete(el)}>x</button>
